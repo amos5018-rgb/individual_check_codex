@@ -62,3 +62,10 @@ python3 -m http.server 8080
 - `NOT_FOUND`: 학번 없음
 - `INVALID_REQUEST`: 요청 오류
 - `SERVER_ERROR`: 서버 오류
+
+
+## 개선 사항 (v2)
+- API URL 미설정 시 프론트에서 즉시 오류 안내를 표시합니다.
+- 조회 중 중복 요청 방지를 위해 버튼 비활성화/로딩 텍스트를 적용했습니다.
+- API 응답 스키마를 검증하여 비정상 응답 처리 안정성을 높였습니다.
+- Apps Script에서 `doPost`를 추가해 향후 2차 확인값 확장을 쉽게 했습니다.

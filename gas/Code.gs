@@ -2,17 +2,21 @@ const SPREADSHEET_ID = 'PUT_YOUR_SPREADSHEET_ID_HERE';
 const SHEET_NAME = 'students_normalized';
 
 function doGet(e) {
+  return handleRequest(e);
+}
+
+function doPost(e) {
+  // 추후 2차 검증값(이름/코드)을 추가하기 쉽게 POST 엔드포인트도 동일 처리
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
   try {
-    const studentId = (e && e.parameter && e.parameter.studentId ? String(e.parameter.studentId) : '').trim();
+    const studentId = getStudentIdFromEvent(e);
 
     const validationError = validateStudentId(studentId);
     if (validationError) {
-      return jsonResponse({
-        ok: false,
-        status: 'INVALID_REQUEST',
-        message: validationError,
-        data: null,
-      });
+      return jsonResponse({ ok: false, status: 'INVALID_REQUEST', message: validationError, data: null });
     }
 
     const row = findStudentRow(studentId);
@@ -26,7 +30,7 @@ function doGet(e) {
     }
 
     const data = mapRowToResponse(row);
-    const isNoOrder = data.cost.total === 0 && data.top.size === '-' && data.bottom.ordered === false;
+    const isNoOrder = isNoOrderRecord(data);
 
     return jsonResponse({
       ok: true,
@@ -35,13 +39,23 @@ function doGet(e) {
       data,
     });
   } catch (err) {
-    return jsonResponse({
-      ok: false,
-      status: 'SERVER_ERROR',
-      message: '서버 오류가 발생했습니다.',
-      data: null,
-    });
+    return jsonResponse({ ok: false, status: 'SERVER_ERROR', message: '서버 오류가 발생했습니다.', data: null });
   }
+}
+
+function getStudentIdFromEvent(e) {
+  const fromQuery = e && e.parameter && e.parameter.studentId;
+  if (fromQuery != null) return String(fromQuery).trim();
+
+  if (e && e.postData && e.postData.contents) {
+    try {
+      const body = JSON.parse(e.postData.contents);
+      return String(body.studentId || '').trim();
+    } catch (parseErr) {
+      return '';
+    }
+  }
+  return '';
 }
 
 function validateStudentId(studentId) {
@@ -96,7 +110,7 @@ function mapRowToResponse(row) {
       initial: normalizeText(row.top_initial),
     },
     bottom: {
-      ordered,
+      ordered: ordered,
       option: ordered ? normalizeText(row.bottom_option) : '-',
       size: ordered ? normalizeText(row.bottom_size) : '-',
     },
@@ -107,8 +121,17 @@ function mapRowToResponse(row) {
       initial: toInt(row.cost_initial),
       total: toInt(row.cost_total),
     },
-    warnings,
+    warnings: warnings,
   };
+}
+
+function isNoOrderRecord(data) {
+  return (
+    data.cost.total === 0 &&
+    data.top.size === '-' &&
+    data.top.sleeve === '-' &&
+    data.bottom.ordered === false
+  );
 }
 
 function parseOrdered(value) {
@@ -127,7 +150,5 @@ function toInt(value) {
 }
 
 function jsonResponse(payload) {
-  return ContentService
-    .createTextOutput(JSON.stringify(payload))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON);
 }
