@@ -3,7 +3,7 @@ const CONFIG = {
   apiBaseUrl:
     (window.__APP_CONFIG__ && window.__APP_CONFIG__.apiBaseUrl) ||
     document.body?.dataset?.apiBaseUrl ||
-    'PUT_YOUR_GAS_EXEC_URL_HERE',
+    https://script.google.com/macros/s/AKfycbx-Ka1rXZBXB-sHAnX7mShiTlfTx_XQZkZnTiCMZ9rQyI37e8cp0pZlS73Qjtnp4PfK/exec,
 };
 
 const studentIdInput = document.getElementById('studentId');
