@@ -79,7 +79,7 @@ function validateStudentId(studentId) {
 }
 
 function validateApiBaseUrl(url) {
-  if (!url || url.includes('/api/order')) {
+  if (!url || url.includes('PUT_YOUR_GAS_EXEC_URL_HERE')) {
     return 'API 주소가 설정되지 않았습니다. 관리자에게 문의하세요.';
   }
   return null;
