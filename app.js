@@ -3,7 +3,7 @@ const CONFIG = {
   apiBaseUrl:
     (window.__APP_CONFIG__ && window.__APP_CONFIG__.apiBaseUrl) ||
     document.body?.dataset?.apiBaseUrl ||
-    https://script.google.com/macros/s/AKfycbx-Ka1rXZBXB-sHAnX7mShiTlfTx_XQZkZnTiCMZ9rQyI37e8cp0pZlS73Qjtnp4PfK/exec,
+    '/api/order',
 };
 
 const studentIdInput = document.getElementById('studentId');
@@ -79,7 +79,7 @@ function validateStudentId(studentId) {
 }
 
 function validateApiBaseUrl(url) {
-  if (!url || url.includes('PUT_YOUR_GAS_EXEC_URL_HERE')) {
+  if (!url || url.includes('/api/order')) {
     return 'API 주소가 설정되지 않았습니다. 관리자에게 문의하세요.';
   }
   return null;
