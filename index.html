@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1학년 11반 반티 주문 확인</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <h1>1학년 11반 반티 주문 확인</h1>
+        <p class="description">학번을 입력하면 본인 주문 내역만 확인할 수 있습니다.</p>
+
+        <label for="studentId">학번</label>
+        <input id="studentId" type="text" inputmode="numeric" placeholder="예) 11101" maxlength="5" />
+        <button id="searchBtn">조회하기</button>
+
+        <p class="notice">※ 현재 MVP는 학번 조회 방식입니다. 타인 학번 공유에 주의하세요.</p>
+        <p id="message" class="message"></p>
+      </section>
+
+      <section id="result" class="result hidden"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
